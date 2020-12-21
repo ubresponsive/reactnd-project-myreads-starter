@@ -24,6 +24,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "react-toastify": "^6.2.0"
   }
 }
