@@ -19,7 +19,7 @@ class BookShelf extends Component {
 		return (
 			<div className="list-books">
 				<div className="list-books-title">
-					<h1>My Bookshelf</h1>
+					<h1>My Bookcase</h1>
 				</div>
 				<div className="list-books-content">
 					{this.props.bookShelves.map((shelf) => {

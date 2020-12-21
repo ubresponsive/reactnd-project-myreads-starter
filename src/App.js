@@ -30,10 +30,10 @@ class BooksApp extends React.Component {
 			this.setState((state) => ({
 				books: state.books.filter((b) => b.id !== book.id).concat([book]),
 			}));
-			let successMsg = 'book has moved to "' + shelfName + '"';
-			if (shelfName === 'None') {
-				successMsg = 'book has been removed from your bookshelf';
-			}
+			let successMsg;
+			shelfName === 'None'
+				? (successMsg = 'book has been removed from your bookcase')
+				: (successMsg = 'book has moved to "' + shelfName + '"');
 			toast.success(successMsg);
 		});
 	};
@@ -47,17 +47,37 @@ class BooksApp extends React.Component {
 		 */
 		showSearchPage: false,
 		books: [],
+		loading: true,
 	};
 
 	componentDidMount() {
 		BooksAPI.getAll().then((books) => {
 			this.setState({
 				books,
+				loading: false,
 			});
 		});
 	}
 
 	render() {
+		if (this.state.loading) {
+			return (
+				<div>
+					<div className="topLoader">
+						<h1 className="loadertext">LOADING</h1>
+					</div>
+					<div className="loader">
+						<div className="loader__bar"></div>
+						<div className="loader__bar"></div>
+						<div className="loader__bar"></div>
+						<div className="loader__bar"></div>
+						<div className="loader__bar"></div>
+						<div className="loader__ball"></div>
+					</div>
+				</div>
+			);
+		}
+
 		return (
 			<div className="app">
 				<ToastContainer
