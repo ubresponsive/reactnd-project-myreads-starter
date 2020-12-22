@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Book from '../components/Book';
+import { sort_by_title } from '../helper';
 
 class BookShelf extends Component {
 	static propType = {
@@ -8,12 +9,6 @@ class BookShelf extends Component {
 		bookShelves: PropTypes.array.isRequired,
 		changeShelf: PropTypes.func.isRequired,
 	};
-
-	sort_by_title(x, y) {
-		if (x.title < y.title) return -1;
-		if (x.title > y.title) return 1;
-		return 0;
-	}
 
 	render() {
 		return (
@@ -29,7 +24,7 @@ class BookShelf extends Component {
 								<div className="bookshelf-books">
 									<ol className="books-grid">
 										{this.props.shelfBooks
-											.sort(this.sort_by_title)
+											.sort(sort_by_title)
 											.filter((book) => book.shelf === shelf.value)
 											.map((book) => (
 												<Book
@@ -45,6 +40,9 @@ class BookShelf extends Component {
 							</div>
 						);
 					})}
+				</div>
+				<div className="list-books-title">
+					<h1>MyReads</h1>
 				</div>
 			</div>
 		);

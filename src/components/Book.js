@@ -32,7 +32,7 @@ class Book extends Component {
 						></div>
 						<div className="book-shelf-changer">
 							<select
-								value={book.shelf}
+								value={book.shelf || 'none'}
 								onChange={(e) =>
 									this.updateBook(
 										e.target.value,
@@ -46,12 +46,16 @@ class Book extends Component {
 								<option value="currentlyReading">Currently Reading</option>
 								<option value="wantToRead">Want to Read</option>
 								<option value="read">Read</option>
-								<option value="none">Remove</option>
+								<option value="none">None</option>
 							</select>
 						</div>
 					</div>
 					<div className="book-title">{book.title}</div>
-					<div className="book-authors">{book.authors.join(', ')}</div>
+					<div className="book-authors">
+						{book.authors !== undefined
+							? book.authors.join(', ')
+							: book.authors}
+					</div>
 				</div>
 			</li>
 		);
