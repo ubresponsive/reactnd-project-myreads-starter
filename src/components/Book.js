@@ -26,7 +26,7 @@ class Book extends Component {
 								backgroundImage: `url(${
 									book.imageLinks !== undefined
 										? book.imageLinks.smallThumbnail
-										: ''
+										: 'http://via.placeholder.com/128x193?text=No%20Image'
 								})`,
 							}}
 						></div>
