@@ -10,37 +10,40 @@ class SearchBooks extends Component {
 	state = {
 		query: '',
 		books: [],
-	};
-
-	static propType = {
-		shelfBooks: PropTypes.array.isRequired,
-		changeShelf: PropTypes.func.isRequired,
-		book: PropTypes.object.isRequired,
+		searching: false,
 	};
 
 	handleInputChange = debounce((keyword) => {
-		!keyword ? this.setState({ books: [] }) : this.searchBooks(keyword);
+		if (!keyword) {
+			this.setState({ books: [] });
+			this.setState({ query: '' });
+		} else {
+			this.searchBooks(keyword);
+		}
 	}, 300);
 
-	searchBooks = (query) => {
-		!query
-			? this.setState({ query: '', books: [] })
-			: this.setState({ query: query.trim() });
-		BooksAPI.search(query)
-			.then((books) => {
-				if (books.length) {
-					books.map((book) =>
-						this.props.shelfBooks
-							.filter((b) => b.id === book.id)
-							.map((b) => (book.shelf = b.shelf))
-					);
-					this.setState({ books });
-				}
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	};
+	async searchBooks(query) {
+		this.setState({ searching: true });
+		this.setState({ query: query.trim() });
+
+		try {
+			const response = await BooksAPI.search(query);
+			const books = Array.isArray(response) ? response : [];
+
+			books.map((book) =>
+				this.props.shelfBooks
+					.filter((b) => b.id === book.id)
+					.map((b) => (book.shelf = b.shelf))
+			);
+			this.setState({ books });
+
+			this.setState({ searching: false });
+		} catch (error) {
+			console.error(error);
+			this.setState({ books: [] });
+			this.setState({ searching: false });
+		}
+	}
 
 	render() {
 		return (
@@ -73,5 +76,10 @@ class SearchBooks extends Component {
 		);
 	}
 }
+
+SearchBooks.propTypes = {
+	shelfBooks: PropTypes.array.isRequired,
+	changeShelf: PropTypes.func.isRequired,
+};
 
 export default SearchBooks;

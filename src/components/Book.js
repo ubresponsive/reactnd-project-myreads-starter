@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class Book extends Component {
-	static propTypes = {
-		book: PropTypes.object.isRequired,
-		changeShelf: PropTypes.func,
-	};
-
 	updateBook(shelf, shelfName) {
 		this.props.changeShelf(this.props.book, shelf, shelfName);
 	}
@@ -24,7 +19,7 @@ class Book extends Component {
 								width: 128,
 								height: 193,
 								backgroundImage: `url(${
-									book.imageLinks !== undefined
+									book.imageLinks
 										? book.imageLinks.smallThumbnail
 										: 'http://via.placeholder.com/128x193?text=No%20Image'
 								})`,
@@ -52,14 +47,17 @@ class Book extends Component {
 					</div>
 					<div className="book-title">{book.title}</div>
 					<div className="book-authors">
-						{book.authors !== undefined
-							? book.authors.join(', ')
-							: book.authors}
+						{book.authors ? book.authors.join(', ') : book.authors}
 					</div>
 				</div>
 			</li>
 		);
 	}
 }
+
+Book.propTypes = {
+	book: PropTypes.object.isRequired,
+	changeShelf: PropTypes.func,
+};
 
 export default Book;
