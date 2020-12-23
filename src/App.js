@@ -9,26 +9,8 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 class BooksApp extends React.Component {
-	static defaultProps = {
-		shelves: [
-			{
-				value: 'currentlyReading',
-				label: 'Currently Reading',
-			},
-			{
-				value: 'wantToRead',
-				label: 'Want to Read',
-			},
-			{
-				value: 'read',
-				label: 'Read',
-			},
-		],
-	};
-
 	state = {
 		books: [],
-		query: '',
 		loading: true,
 	};
 
@@ -119,5 +101,22 @@ class BooksApp extends React.Component {
 		);
 	}
 }
+
+BooksApp.defaultProps = {
+	shelves: [
+		{
+			value: 'currentlyReading',
+			label: 'Currently Reading',
+		},
+		{
+			value: 'wantToRead',
+			label: 'Want to Read',
+		},
+		{
+			value: 'read',
+			label: 'Read',
+		},
+	],
+};
 
 export default BooksApp;
