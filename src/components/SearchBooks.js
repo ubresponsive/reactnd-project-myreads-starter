@@ -15,16 +15,14 @@ class SearchBooks extends Component {
 
 	handleInputChange = debounce((keyword) => {
 		if (!keyword) {
-			this.setState({ books: [] });
-			this.setState({ query: '' });
+			this.setState({ books: [], query: '' });
 		} else {
 			this.searchBooks(keyword);
 		}
 	}, 300);
 
 	async searchBooks(query) {
-		this.setState({ searching: true });
-		this.setState({ query: query.trim() });
+		this.setState({ searching: true, query: query.trim() });
 
 		try {
 			const response = await BooksAPI.search(query);
@@ -35,13 +33,10 @@ class SearchBooks extends Component {
 					.filter((b) => b.id === book.id)
 					.map((b) => (book.shelf = b.shelf))
 			);
-			this.setState({ books });
-
-			this.setState({ searching: false });
+			this.setState({ books, searching: false });
 		} catch (error) {
 			console.error(error);
-			this.setState({ books: [] });
-			this.setState({ searching: false });
+			this.setState({ books: [], searching: false });
 		}
 	}
 

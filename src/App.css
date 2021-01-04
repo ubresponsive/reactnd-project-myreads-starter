@@ -206,6 +206,12 @@ button:active {
 
 /* loader */
 
+.topLoader {
+	margin-top: 200px;
+	display: block;
+	width: 100%;
+}
+
 .loadertext {
 	text-align: center;
 	color: green;
