@@ -14,30 +14,29 @@ class BooksApp extends React.Component {
 		loading: true,
 	};
 
-	changeShelf = (book, shelf, shelfName) => {
-		BooksAPI.update(book, shelf)
-			.then(() => {
-				book.shelf = shelf;
-				this.setState((state) => ({
-					books: state.books.filter((b) => b.id !== book.id).concat([book]),
-				}));
-				let successMsg;
-				shelfName === 'None'
-					? (successMsg = 'book has been removed from your bookcase')
-					: (successMsg = 'book has moved to "' + shelfName + '"');
-				toast.success(successMsg);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+	changeShelf = async (book, shelf, shelfName) => {
+		try {
+			await BooksAPI.update(book, shelf);
+			book.shelf = shelf;
+			this.setState((state) => ({
+				books: state.books.filter((b) => b.id !== book.id).concat([book]),
+			}));
+			let successMsg;
+			shelfName === 'None'
+				? (successMsg = 'book has been removed from your bookcase')
+				: (successMsg = 'book has moved to "' + shelfName + '"');
+			toast.success(successMsg);
+		} catch (error) {
+			console.error(error);
+			toast.error('Oopsie, Houston we have a problem');
+		}
 	};
 
-	componentDidMount() {
-		BooksAPI.getAll().then((books) => {
-			this.setState({
-				books,
-				loading: false,
-			});
+	async componentDidMount() {
+		const books = await BooksAPI.getAll();
+		this.setState({
+			books,
+			loading: false,
 		});
 	}
 
@@ -69,32 +68,24 @@ class BooksApp extends React.Component {
 					newestOnTop={true}
 				/>
 				<Switch>
-					<Route
-						exact
-						path="/"
-						render={() => (
-							<div>
-								<BookShelf
-									shelfBooks={this.state.books}
-									bookShelves={this.props.shelves}
-									changeShelf={this.changeShelf}
-								/>
-								<div className="open-search">
-									<Link to="/search">Add a book</Link>
-								</div>
-							</div>
-						)}
-					/>
-					<Route
-						exact
-						path="/search"
-						render={() => (
-							<SearchBooks
+					<Route exact path="/">
+						<div>
+							<BookShelf
 								shelfBooks={this.state.books}
+								bookShelves={this.props.shelves}
 								changeShelf={this.changeShelf}
 							/>
-						)}
-					/>
+							<div className="open-search">
+								<Link to="/search">Add a book</Link>
+							</div>
+						</div>
+					</Route>
+					<Route exact path="/search">
+						<SearchBooks
+							shelfBooks={this.state.books}
+							changeShelf={this.changeShelf}
+						/>
+					</Route>
 					<Route component={Error404} />
 				</Switch>
 			</div>
